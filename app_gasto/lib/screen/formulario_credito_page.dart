@@ -1,6 +1,8 @@
 import 'package:app_gasto/notifiers/gasto_state_notifiers.dart';
+import 'package:app_gasto/utils/formateoMonedas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+ // ruta donde guardes la clase
 
 class FormularioCreditoPage extends ConsumerStatefulWidget {
   const FormularioCreditoPage({super.key});
@@ -10,8 +12,8 @@ class FormularioCreditoPage extends ConsumerStatefulWidget {
 }
 
 class _FormularioCreditoPageState extends ConsumerState<FormularioCreditoPage> {
-  final precioCtrl = TextEditingController(text: '161000000');
-  final anticipoCtrl = TextEditingController(text: '40000000');
+  final precioCtrl = TextEditingController(text: '');
+  final anticipoCtrl = TextEditingController(text: '');
   final tasaCtrl = TextEditingController(text: '1.5');
   final abonoCtrl = TextEditingController();
 
@@ -23,11 +25,14 @@ class _FormularioCreditoPageState extends ConsumerState<FormularioCreditoPage> {
     });
   }
 
+  double parseMoneda(String valor) {
+    return double.tryParse(valor.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(gastoProvider);
     final notifier = ref.read(gastoProvider.notifier);
-
     final esPrimerRegistro = state.registroGasto.isEmpty;
 
     return Scaffold(
@@ -40,22 +45,31 @@ class _FormularioCreditoPageState extends ConsumerState<FormularioCreditoPage> {
               TextField(
                 controller: precioCtrl,
                 keyboardType: TextInputType.number,
+               inputFormatters: [
+    CustomCurrencyFormatter(), // ✅ nuestro formateador limpio
+  ],
                 decoration: const InputDecoration(labelText: 'Precio total'),
               ),
               TextField(
                 controller: anticipoCtrl,
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  CustomCurrencyFormatter(), // ✅ con formato
+                ],
                 decoration: const InputDecoration(labelText: 'Anticipo'),
               ),
               TextField(
                 controller: tasaCtrl,
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 decoration: const InputDecoration(labelText: 'Tasa %'),
               ),
             ] else ...[
               TextField(
                 controller: abonoCtrl,
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  CustomCurrencyFormatter(), // ✅ con formato
+                ],
                 decoration: const InputDecoration(labelText: 'Abono a capital'),
               ),
             ],
@@ -65,20 +79,20 @@ class _FormularioCreditoPageState extends ConsumerState<FormularioCreditoPage> {
                   ? null
                   : () async {
                       if (esPrimerRegistro) {
-  await notifier.guardarPago(
-    precio: double.parse(precioCtrl.text),
-    anticipo: double.parse(anticipoCtrl.text),
-    tasaPct: double.parse(tasaCtrl.text),
-    abonoCapital: 0, // siempre 0 en el primer registro
-  );
-} else {
-  await notifier.guardarPago(
-    precio: 0, // no se usa después del primer registro
-    anticipo: 0,
-    tasaPct: double.parse(tasaCtrl.text),
-    abonoCapital: double.parse(abonoCtrl.text),
-  );
-}
+                        await notifier.guardarPago(
+                          precio: parseMoneda(precioCtrl.text),
+                          anticipo: parseMoneda(anticipoCtrl.text),
+                          tasaPct: double.parse(tasaCtrl.text),
+                          abonoCapital: 0,
+                        );
+                      } else {
+                        await notifier.guardarPago(
+                          precio: 0,
+                          anticipo: 0,
+                          tasaPct: double.parse(tasaCtrl.text),
+                          abonoCapital: parseMoneda(abonoCtrl.text),
+                        );
+                      }
 
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
