@@ -22,7 +22,7 @@ class CreditoService {
       // Primer periodo
       saldoInicial = precio - anticipo;
       if (saldoInicial <= 0) throw Exception('Anticipo >= precio.');
-      periodo = 1;
+      periodo = 0;
     } else {
       saldoInicial = ultimo.saldoFinal;
       if (saldoInicial <= 0) throw Exception('Crédito saldado.');
@@ -31,7 +31,7 @@ class CreditoService {
 
     // Calcular interés (solo si periodo >= 7)
     double interes = 0;
-    if (periodo >= 7) {
+    if (periodo >= 8) {
       interes = saldoInicial * (tasaPct / 100.0);
     }
 

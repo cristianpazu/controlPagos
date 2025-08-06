@@ -53,4 +53,15 @@ class GastoStateNotifiers extends StateNotifier<GastoState> {
   );
   await cargarGastos(); // <-- Esto es lo que actualiza la lista
 }
+
+Future<void> limpiarTodo() async {
+  if (service == null) return;
+  state = state.copyWith(isLoding: true);
+
+  await service!.repo.borrarTodos(); // Nuevo método en el repositorio
+  await cargarGastos();
+}
+
+
+
 }

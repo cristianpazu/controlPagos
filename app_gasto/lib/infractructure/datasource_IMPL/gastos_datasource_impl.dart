@@ -22,5 +22,10 @@ print('rowsZZZZZZZZZZZZZZZZ $rows');
 
     return rows.map(Registrogasto.fromMap).toList();
   }
+  
+  @override
+  Future<void> borrarTodos()async {
+  await db.delete('registros');
+  }
 
  }

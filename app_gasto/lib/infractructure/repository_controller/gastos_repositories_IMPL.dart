@@ -18,4 +18,9 @@ return gastosDatasource.consultarTodosGasto();
   Future<int> guardarGasto(Registrogasto registroGasto) {
     return gastosDatasource.guardarGasto(registroGasto);
   }
+  
+  @override
+  Future<void> borrarTodos() {
+   return gastosDatasource.borrarTodos();
+  }
 }

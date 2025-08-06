@@ -7,6 +7,6 @@ Future<int> guardarGasto(Registrogasto registroGasto);
 
 Future<List<Registrogasto>> consultarTodosGasto();
 
-
+Future<void> borrarTodos();
 
 }

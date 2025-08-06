@@ -6,4 +6,6 @@ abstract class Gastosrepositories {
 
 Future<List<Registrogasto>> consultarTodosGasto();
 
+Future<void> borrarTodos();
+
 }
