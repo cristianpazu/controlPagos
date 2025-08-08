@@ -59,13 +59,17 @@ class ListaPagosPage extends ConsumerWidget {
                   separatorBuilder: (_, __) => const Divider(height: 1),
                   itemBuilder: (context, i) {
                     final pago = state.registroGasto[i];
+                    
                     return ListTile(
-                      leading: Text('#${pago.periodo}'),
+                      leading: Text('Mes #${pago.periodo}'),
                       title: Text('Cuota: ${formatter.format(pago.cuota)}'),
                       subtitle: Text(
                         'Interés: ${formatter.format(pago.interes)} | '
-                        'Amortización: ${formatter.format(pago.amortizacion)}\n'
-                        'Saldo: ${formatter.format(pago.saldoInicial)} → ${formatter.format(pago.saldoFinal)}',
+                        'valor del abono: ${formatter.format(pago.amortizacion)}\n'
+                        'Saldo: ${formatter.format(pago.saldoInicial)}\n'
+                        'Saldo final: ${formatter.format(pago.saldoFinal)}'
+                        ,
+                       
                       ),
                       trailing: Text(
                         DateFormat('dd/MM/yyyy').format(pago.fecha!),

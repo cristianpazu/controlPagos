@@ -31,7 +31,7 @@ class CreditoService {
 
     // Calcular interés (solo si periodo >= 7)
     double interes = 0;
-    if (periodo >= 8) {
+    if (periodo >= 7) {
       interes = saldoInicial * (tasaPct / 100.0);
     }
 
