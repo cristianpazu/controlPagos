@@ -7,7 +7,7 @@ class CreditoService {
 
   Future<Registrogasto> guardarSiguiente({
     required double precio,
-    required double anticipo,
+    required double anticipo, 
     required double tasaPct,
     required double abonoCapital,
   }) async {
@@ -42,7 +42,7 @@ class CreditoService {
     final cuota = interes + amortizacion;
 
     // Calcular saldo final
-    final saldoFinal = saldoInicial - amortizacion;
+    final saldoFinal = saldoInicial - cuota;
 
     // Crear registro
     final reg = Registrogasto(
